@@ -13,11 +13,14 @@ namespace LeaveManagementAPI.Repository
         {
             _context = context;
         }
+
+        //implemented
         public ICollection<LeaveApplication> GetLeaveApplications()
         {
             return _context.LeaveApplications.ToList();
         }
 
+        //implemented
         public LeaveApplication GetLeaveApplicationById(int leaveId)
         {
             return _context.LeaveApplications.Where(l => l.Id == leaveId).FirstOrDefault();
@@ -28,18 +31,21 @@ namespace LeaveManagementAPI.Repository
             return _context.LeaveApplications.Any(l => l.Id == leaveId);
         }
 
+        //implemented
         public bool CreateLeaveApplication(LeaveApplication leaveApplication)
         {
             _context.Add(leaveApplication);
             return Save();
         }
 
+        //implemented
         public bool UpdateLeaveApplication(LeaveApplication leaveApplication)
         {
             _context.Update(leaveApplication);
             return Save();
         }
 
+        //implemented
         public bool DeleteLeaveApplication(LeaveApplication leaveApplication)
         {
             _context.Remove(leaveApplication);

@@ -39,19 +39,21 @@ namespace LeaveManagementAPI.Repository
             return _context.Users.Any(u => u.Id == userId);
         }
 
-
+        //Implemented
         public bool CreateUser(User user)
         {
             _context.Add(user);
             return Save();
         }
 
+        //Implemented
         public bool UpdateUser(User user)
         {
             _context.Update(user);
             return Save();
         }
 
+        //Implemented
         public bool DeleteUser(User user)
         {
             _context.Remove(user);
