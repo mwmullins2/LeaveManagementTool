@@ -56,5 +56,90 @@ namespace LeaveManagementAPI.Controllers
             return Ok(leaveApplication);
         }
 
+        // API endpoint for creating a leave application
+        // Accepts a LeaveApplicationDTO object in the request body
+        // Returns 204 if leave application is successfully created
+        // Returns 400 if request is invalid
+        // Returns 500 if an error occurs while saving to the database
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+
+        public IActionResult CreateLeaveApplication([FromBody] LeaveApplicationDTO leaveApplicationCreate)
+        {
+            if (leaveApplicationCreate == null)
+                return BadRequest(ModelState);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var leaveAppMap = _mapper.Map<LeaveApplication>(leaveApplicationCreate);
+
+            if (!_leaveApplicationRepository.CreateLeaveApplication(leaveAppMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully Created Leave Application");
+        }
+
+        //This endpoint updates a leave application with the given ID.
+        //It checks if the input is valid, if the leave application exists, and then updates it.
+        //If successful, it returns a success message.
+        [HttpPut("{leaveApplicationId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateLeaveApplication(int leaveApplicationId,
+            [FromBody] LeaveApplicationDTO updatedLeaveApplication)
+        {
+            if(updatedLeaveApplication == null)
+                return BadRequest(ModelState);
+
+            if(leaveApplicationId != updatedLeaveApplication.Id)
+                return BadRequest(ModelState);
+
+            if(!_leaveApplicationRepository.LeaveApplicationExists(leaveApplicationId))
+                return NoContent();
+
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var leaveAppMap = _mapper.Map<LeaveApplication>(updatedLeaveApplication);
+
+            if (!_leaveApplicationRepository.UpdateLeaveApplication(leaveAppMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully Updated");
+        }
+
+        //This code defines a DELETE endpoint for deleting a specific leave application by ID.
+        //It checks if the leave application exists and returns an error if it doesn't.
+        //It then attempts to delete the leave application and returns a success message if it succeeds.
+        [HttpDelete("{leaveApplicationId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteLeaveApplication(int leaveApplicationId)
+        {
+            if(!_leaveApplicationRepository.LeaveApplicationExists(leaveApplicationId))
+                return BadRequest(ModelState);
+
+            var leaveApplicationToDelete = _leaveApplicationRepository.GetLeaveApplicationById(leaveApplicationId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_leaveApplicationRepository.DeleteLeaveApplication(leaveApplicationToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong while deleting leave application.");
+            }
+
+            return Ok("Successfully Deleted");
+        }
     }
 }
