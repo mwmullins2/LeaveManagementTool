@@ -21,6 +21,9 @@ namespace LeaveManagementAPI.Controllers
             _mapper = mapper;
         }
 
+        // HTTP GET endpoint to retrieve all users from the database and return them in the response body
+        // Returns a 200 OK status code and an IEnumerable of UserDTOs if successful,
+        // otherwise returns a 400 Bad Request status code if the ModelState is invalid.
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<User>))]
         public IActionResult GetUsers()
@@ -33,6 +36,11 @@ namespace LeaveManagementAPI.Controllers
             return Ok(users);
         }
 
+        // HTTP GET request to get all leave applications of a user by their user Id
+        // If user does not exist, returns 404 Not Found status code
+        // Uses IUserRepository to get the user's leave applications from the database
+        // Uses AutoMapper to map the leave applications to LeaveApplicationDTOs for presentation
+        // Returns 200 OK status code and the list of LeaveApplicationDTOs as response body
         [HttpGet("{userId}/leaveApplication")]
         [ProducesResponseType(200, Type = typeof(User))]
         [ProducesResponseType(400)]
@@ -51,10 +59,13 @@ namespace LeaveManagementAPI.Controllers
             return Ok(user);
         }
 
+        // Retrieves a specific user by their ID.
+        // Returns a 200 status code and the user object if found, otherwise returns a 404 if the user is not found.
+        // Also returns a 400 if the ModelState is not valid.
         [HttpGet("{userId}")]
         [ProducesResponseType(200, Type = typeof(User))]
         [ProducesResponseType(400)]
-        public IActionResult GetUserbyId(int userId)
+        public IActionResult GetUserById(int userId)
         {
             if (!_userRepository.UserExists(userId))
                 return NotFound();
@@ -67,6 +78,9 @@ namespace LeaveManagementAPI.Controllers
             return Ok(user);
         }
 
+        // This endpoint creates a new user.
+        // It checks if the user already exists and returns a 422 status if so.
+        // Uses the UserManageDTO instead of UserDTO so all properties of the user can be created.
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -99,6 +113,10 @@ namespace LeaveManagementAPI.Controllers
             return Ok("Successfully Create");
         }
 
+
+        // This endpoint updates an existing user using the User ID.
+        // Checks if user exists.
+        // Uses UserManageDTO instead of UserDTO to allow editing of all user properties.
         [HttpPut("{userId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
@@ -128,6 +146,8 @@ namespace LeaveManagementAPI.Controllers
             return Ok("Successfully Updated");
         }
 
+
+        // Deletes a user using the user ID.
         [HttpDelete("{userId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
