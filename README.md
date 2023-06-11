@@ -4,3 +4,5 @@ This project is a work in progress and is intended to be used as a backend API f
 The project follows the repository pattern and uses interfaces, repositories, models, controllers, and DTOs to hide sensitive data. Currently, the API is designed to handle user and leave management operations, such as creating, reading, updating, and deleting users and their associated leave applications.
 
 Note that this project is currently only a web API, and a frontend will be implemented later. However, the API can be tested using tools such as Postman or Swagger.
+
+![image](https://raw.githubusercontent.com/mwmullins2/LeaveManagementTool/33308298a06478509f24cfe2b459feaaced36adf/LeaveManagementAPI/LeaveManagementAPI.PNG)
